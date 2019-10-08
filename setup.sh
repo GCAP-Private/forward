@@ -43,7 +43,7 @@ MEM=50G
 CORES=8
 TIME=120:00:00
 
-for var in USERNAME PORT PARTITION RESOURCE MEM TIME CONTAINERSHARE
+for var in USERNAME PORT PARTITION RESOURCE MEM CORES TIME CONTAINERSHARE
 do
     echo "$var="'"'"$(eval echo '$'"$var")"'"'
 done >> params.sh
