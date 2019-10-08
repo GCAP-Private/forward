@@ -10,5 +10,8 @@ module load stata
 /home/groups/maggiori/miniconda3/bin/conda init bash
 source ~/.bashrc
 
+STATATMP="/scratch/groups/maggiori/stata_tmp"
+export STATATMP
+
 source activate gcap
 jupyter lab --no-browser --port=$PORT
