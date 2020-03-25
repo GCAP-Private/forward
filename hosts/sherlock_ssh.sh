@@ -11,7 +11,7 @@ LOGIN_NODE=$((1 + RANDOM % 8))
 
 echo "Host sherlock
     User ${USERNAME}
-    Hostname sh-ln0${LOGIN_NODE}.stanford.edu
+    Hostname sh0${LOGIN_NODE}-ln0${LOGIN_NODE}.stanford.edu
     GSSAPIDelegateCredentials yes
     GSSAPIAuthentication yes
     ControlMaster auto
