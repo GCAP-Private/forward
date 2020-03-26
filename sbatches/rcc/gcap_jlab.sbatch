@@ -11,8 +11,7 @@ conda init bash
 source ~/.bashrc
 conda activate /project2/neiman/GCAP/software/python/gcap
 
-# TODO: Make scratch folder and link here
-# STATATMP="/scratch/midway2/neiman/stata_tmp"
-# export STATATMP
+STATATMP="/scratch/midway2/neiman/stata_tmp"
+export STATATMP
 
 /project2/neiman/GCAP/software/python/gcap/bin/jupyter lab --no-browser --port=$PORT
