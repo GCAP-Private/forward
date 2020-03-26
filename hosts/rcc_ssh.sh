@@ -13,4 +13,4 @@ echo "Host rcc
     GSSAPIAuthentication yes
     ControlMaster auto
     ControlPersist yes
-    ControlPath ~/.ssh/%l%r@%h:%p"
+    ControlPath ~/.ssh/control/%C"
