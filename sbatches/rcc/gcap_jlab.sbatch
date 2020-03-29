@@ -6,8 +6,9 @@ cd $NOTEBOOK_DIR
 
 module load stata/15
 module load Anaconda3
-source ~/.bashrc
-conda init bash
+bash /project2/neiman/GCAP/software/RCC_Conda_Init.sh
+# source ~/.bashrc
+# conda init bash
 source ~/.bashrc
 conda activate /project2/neiman/GCAP/software/python/gcap
 
