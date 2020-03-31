@@ -6,7 +6,7 @@ cd $NOTEBOOK_DIR
 
 module load stata/15
 module load Anaconda3
-bash /project2/neiman/GCAP/software/RCC_Conda_Init.sh
+source /project2/neiman/GCAP/software/RCC_Conda_Init.sh
 # source ~/.bashrc
 # conda init bash
 source ~/.bashrc
