@@ -20,7 +20,14 @@ fi
 NAME=$1
 
 echo "Killing $NAME slurm job on ${RESOURCE}"
-ssh ${RESOURCE} "squeue --name=$NAME --user=$USERNAME -o '%A' -h | xargs --no-run-if-empty /usr/bin/scancel"
+
+if [[ "$RESOURCE" == "rcc" ]]
+then
+	ssh ${RESOURCE} "squeue --name=$NAME --user=$USERNAME -o '%A' -h | xargs --no-run-if-empty /software/slurm-current-el7-x86_64/bin/scancel"
+else
+	ssh ${RESOURCE} "squeue --name=$NAME --user=$USERNAME -o '%A' -h | xargs --no-run-if-empty /usr/bin/scancel"
+
+fi
 
 echo "Killing listeners on ${RESOURCE}"
 ssh ${RESOURCE} "/usr/sbin/lsof -i :$PORT -t | xargs --no-run-if-empty kill"
