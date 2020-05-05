@@ -8,11 +8,13 @@ cd $NOTEBOOK_DIR
 module load system
 module load x11
 module load stata
-/home/groups/maggiori/miniconda3/bin/conda init bash
-source ~/.bashrc
+ml py-tensorflow/2.1.0_py36
+
+# pip3 install ipython --upgrade --user
+# pip3 install pandas --upgrade --user
+# pip3 install jupyter --upgrade --user
 
 STATATMP="/scratch/groups/maggiori/stata_tmp"
 export STATATMP
 
-source activate gcap
-jupyter lab --no-browser --port=$PORT
+~/.local/bin/jupyter lab --no-browser --port=$PORT
