@@ -12,7 +12,8 @@ source /project2/neiman/GCAP/software/RCC_Conda_Init.sh
 source ~/.bashrc
 conda activate /project2/neiman/GCAP/software/python/gcap
 
-STATATMP="/scratch/midway2/neiman/stata_tmp"
+STATATMP="/scratch/midway2/$USER/stata_tmp"
 export STATATMP
+mkdir -p $STATATMP
 
 /project2/neiman/GCAP/software/python/gcap/bin/jupyter lab --no-browser --port=$PORT
