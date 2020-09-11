@@ -8,10 +8,11 @@ read -p "Sherlock username > "  USERNAME
 
 # Randomly select login node from 1..4
 LOGIN_NODE=$((1 + RANDOM % 8))
+# Switched to always chooseing 2 as it works better
 
 echo "Host sherlock
     User ${USERNAME}
-    Hostname sh0${LOGIN_NODE}-ln0${LOGIN_NODE}.stanford.edu
+    Hostname sh02-ln02.stanford.edu
     GSSAPIDelegateCredentials yes
     GSSAPIAuthentication yes
     ControlMaster auto
