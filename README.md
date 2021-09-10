@@ -12,7 +12,7 @@ The folder [sbatches](sbatches) contains scripts, organized by cluster resource,
 for use and submission. It's up to you to decide if you want a port forwarded (e.g., for a jupyter notebook)
 or just an instruction for how to connect to a running node with your application.
 
-This is a GCAP-specific fork of the original [forward](https://github.com/vsoch/forward) project by [vsoch](https://github.com/vsoch) and (raphtown)[https://github.com/raphtown]
+This is a GCAP-specific fork of the original [forward](https://github.com/vsoch/forward) project by [vsoch](https://github.com/vsoch) and [raphtown](https://github.com/raphtown)
 
 ## Tiny Tutorials
 Here we will provide some "tiny tutorials" to go along with helping to use the software. These are tiny because there
