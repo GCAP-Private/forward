@@ -5,12 +5,12 @@ NOTEBOOK_DIR=$2
 cd $NOTEBOOK_DIR
 
 module load stata/15
-module load Anaconda3
+module load python/anaconda-2021.05
 source /project2/neiman/GCAP/software/RCC_Conda_Init.sh
 # source ~/.bashrc
 # conda init bash
 source ~/.bashrc
-conda activate /project2/neiman/GCAP/software/python/gcap
+source activate /project2/neiman/GCAP/software/python/gcap
 
 # STATATMP="/scratch/midway2/$USER/stata_tmp"
 STATATMP="/tmp/stata_tmp"
