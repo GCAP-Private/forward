@@ -17,7 +17,7 @@ RESOURCE=${RESOURCE:-sherlock}
 echo
 echo "First, enter your username."
 echo
-read -p "Stanford username > "  USERNAME
+read -p "Username > "  USERNAME
 
 # Get port number
 echo
