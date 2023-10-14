@@ -12,7 +12,7 @@ LOGIN_NODE=$((1 + RANDOM % 8))
 
 echo "Host sherlock
     User ${USERNAME}
-    Hostname sh03-ln03.stanford.edu
+    Hostname login.sherlock.stanford.edu
     GSSAPIDelegateCredentials yes
     GSSAPIAuthentication yes
     ControlMaster auto

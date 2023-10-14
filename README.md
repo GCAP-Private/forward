@@ -12,6 +12,8 @@ The folder [sbatches](sbatches) contains scripts, organized by cluster resource,
 for use and submission. It's up to you to decide if you want a port forwarded (e.g., for a jupyter notebook)
 or just an instruction for how to connect to a running node with your application.
 
+This is a GCAP-specific fork of the original [forward](https://github.com/vsoch/forward) project by [vsoch](https://github.com/vsoch) and [raphtown](https://github.com/raphtown)
+
 ## Tiny Tutorials
 Here we will provide some "tiny tutorials" to go along with helping to use the software. These are tiny because there
 are many possible use cases!
@@ -229,17 +231,6 @@ While the forward tool cannot control the busyness of slurm, these two strategie
 
 As you would kill a job on Sherlock and see some delay for the node to come down, the
 same can be try here! Try waiting 20-30 seconds to give the node time to exit, and try again.
-
-
-## How do I contribute?
-
-First, please read the [contributing docs](CONTRIBUTING.md). Generally, you will want to:
-
- - fork the repository to your username
- - clone your fork
- - checkout a new branch for your feature, commit and push
- - add your name to the CONTRIBUTORS.md
- - issue a pull request!
 
 ## Adding new sbatch scripts
 
