@@ -7,7 +7,7 @@ cd $NOTEBOOK_DIR
 module load system
 module load x11
 module load git
-module load stata/17
+module load stata/16
 /home/groups/maggiori/miniconda3/bin/conda init bash
 source ~/.bashrc
 
