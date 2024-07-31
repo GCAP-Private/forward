@@ -17,7 +17,7 @@ RESOURCE=${RESOURCE:-sherlock}
 echo
 echo "First, enter your username."
 echo
-read -p "Username > "  USERNAME
+read -p "Username > "  RES_USERNAME
 
 # Get port number
 echo
@@ -46,7 +46,7 @@ if [ "$RESOURCE" == "rcc" ]; then
     CONTAINERSHARE="/project2/neiman/GCAP/software/python/vsochat/share"
 fi
 
-for var in USERNAME PORT PARTITION RESOURCE MEM CORES TIME CONTAINERSHARE
+for var in RES_USERNAME PORT PARTITION RESOURCE MEM CORES TIME CONTAINERSHARE
 do
     echo "$var="'"'"$(eval echo '$'"$var")"'"'
 done >> params.sh
