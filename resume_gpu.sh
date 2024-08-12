@@ -16,4 +16,4 @@ NAME="${1}"
 
 echo "ssh ${RESOURCE} squeue --name=$NAME --user=$RES_USERNAME -o "%N" -h"
 MACHINE=`ssh ${RESOURCE} squeue --name=$NAME --user=$RES_USERNAME -o "%N" -h`
-ssh -L $PORT:localhost:$PORT ${RESOURCE} ssh -L $PORT:localhost:$PORT -N $MACHINE &
+ssh -L ${PORT}:localhost:${PORT} ${RESOURCE} ssh -L ${PORT}:localhost:${PORT} -N $MACHINE &
