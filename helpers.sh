@@ -93,6 +93,9 @@ function get_machine() {
 
         ATTEMPT=$(( ATTEMPT + 1 ))
         TIMEOUT=$(( TIMEOUT * 2 ))
+        if [ $TIMEOUT -gt 512 ]; then
+            TIMEOUT=128
+        fi
 
     done
 
