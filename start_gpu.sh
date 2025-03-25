@@ -52,17 +52,37 @@ echo
 echo "== Submitting sbatch =="
 
 SBATCH_NAME=$(basename $SBATCH)
-command="sbatch
-    --job-name=$NAME
-    --partition=$PARTITION
-    --ntasks=$CORES
-    --gpus=$GPUS
-    --nodes=1
-    --output=$RESOURCE_HOME/forward-util/$SBATCH_NAME.out
-    --error=$RESOURCE_HOME/forward-util/$SBATCH_NAME.err
-    --mem=$MEM
-    --time=$TIME
-    $RESOURCE_HOME/forward-util/$SBATCH_NAME $PORT \"${@:2}\""
+
+if [ "$CONSTRAINT_H100" -eq 1 ]
+then
+    echo "GPU constrained to H100"
+    command="sbatch
+        --job-name=$NAME
+        --partition=$PARTITION
+        --ntasks=$CORES
+        --gpus=$GPUS
+        --constraint=GPU_SKU:H100_SXM5
+        --nodes=1
+        --output=$RESOURCE_HOME/forward-util/$SBATCH_NAME.out
+        --error=$RESOURCE_HOME/forward-util/$SBATCH_NAME.err
+        --mem=$MEM
+        --time=$TIME
+        $RESOURCE_HOME/forward-util/$SBATCH_NAME $PORT \"${@:2}\""
+else
+    command="sbatch
+        --job-name=$NAME
+        --partition=$PARTITION
+        --ntasks=$CORES
+        --gpus=$GPUS
+        --nodes=1
+        --output=$RESOURCE_HOME/forward-util/$SBATCH_NAME.out
+        --error=$RESOURCE_HOME/forward-util/$SBATCH_NAME.err
+        --mem=$MEM
+        --time=$TIME
+        $RESOURCE_HOME/forward-util/$SBATCH_NAME $PORT \"${@:2}\""
+fi
+
+
 
 echo ${command}
 ssh ${RESOURCE} ${command}
