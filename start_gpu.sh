@@ -53,6 +53,9 @@ echo "== Submitting sbatch =="
 
 SBATCH_NAME=$(basename $SBATCH)
 
+# Set default value for CONSTRAINT_H100 if not defined
+: ${CONSTRAINT_H100:=0}
+
 if [ "$CONSTRAINT_H100" -eq 1 ]
 then
     echo "GPU constrained to H100"
