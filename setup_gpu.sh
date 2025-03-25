@@ -1,11 +1,11 @@
 #!/bin/bash
 #
 # Sets up parameters for use with other scripts.  Should be run once.
-# Sample usage: bash setup.sh
+# Sample usage: bash setup_gpu.sh
 !/bin/bash
 #
 # Sets up parameters for use with other scripts.  Should be run once.
-# Sample usage: bash setup.sh
+# Sample usage: bash setup_gpu.sh
 echo
 echo "First, enter the name of the server you are setting up your access to. This
 must be either sherlock or rcc."
@@ -30,10 +30,11 @@ echo
 
 # sherlock shared settings
 if [ "$RESOURCE" == "sherlock" ]; then
-    PARTITION="maggiori,gsb,normal,owners"
-	MEM="120G"
-    CORES="3"
-    TIME="24:00:00"
+    PARTITION="maggiori"
+	MEM="80G"
+    CORES="8"
+    GPUS="1"
+    TIME="4:00:00"
     CONTAINERSHARE="/scratch/users/vsochat/share"
 fi
 
@@ -42,11 +43,12 @@ if [ "$RESOURCE" == "rcc" ]; then
     PARTITION="neiman"
 	MEM="50G"
     CORES="2"
+    GPUS="2"
     TIME="60:00:00"
     CONTAINERSHARE="/project2/neiman/GCAP/software/python/vsochat/share"
 fi
 
-for var in RES_USERNAME PORT PARTITION RESOURCE MEM CORES TIME CONTAINERSHARE
+for var in RES_USERNAME PORT PARTITION RESOURCE MEM CORES GPUS TIME CONTAINERSHARE
 do
     echo "$var="'"'"$(eval echo '$'"$var")"'"'
-done >> params.sh
+done >> params_gpu.sh

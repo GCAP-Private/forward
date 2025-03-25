@@ -2,13 +2,13 @@
 #
 # Starts a remote sbatch jobs and sets up correct port forwarding.
 # This version also activates GPUs.
-# Sample usage: bash start.sh sherlock/singularity-jupyter 
-#               bash start.sh sherlock/singularity-jupyter /home/users/raphtown
-#               bash start.sh sherlock/singularity-jupyter /home/users/raphtown
+# Sample usage: bash start_gpu.sh sherlock/singularity-jupyter 
+#               bash start_gpu.sh sherlock/singularity-jupyter /home/users/raphtown
+#               bash start_gpu.sh sherlock/singularity-jupyter /home/users/raphtown
 
 if [ ! -f params_gpu.sh ]
 then
-    echo "Need to configure params before first run, run setup.sh!"
+    echo "Need to configure params before first run, run setup_gpu.sh!"
     exit
 fi
 . params_gpu.sh

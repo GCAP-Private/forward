@@ -7,6 +7,7 @@ Useful for jupyter notebook and tensorboard, amongst other things.
 
  - **start.sh** is intended for submitting a job and setting up ssh forwarding
  - **start-node.sh** will submit the job and give you a command to ssh to the node, without port forwarding
+ - **start_gpu.sh** is intended for submitting a job and setting up ssh forwarding with multiple GPUs
 
 The folder [sbatches](sbatches) contains scripts, organized by cluster resource, that are intended
 for use and submission. It's up to you to decide if you want a port forwarded (e.g., for a jupyter notebook)
@@ -36,6 +37,14 @@ bash setup.sh
 ```
 
 You can always edit `params.sh` later to change these configuration options. 
+
+To use `start_gpu.sh` you will also need to create a `params_gpu.sh` file. To do so, follow the prompts at:
+
+```bash
+bash setup_gpu.sh
+```
+
+You can always edit `params_gpu.sh` later to change these configuration options. This is where you go to change the number of GPUs and the run time.
 
 #### Parameters
 
