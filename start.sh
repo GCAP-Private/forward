@@ -18,14 +18,20 @@ then
     exit
 fi
 
+NAME="${1:-}"
+
+if [ "$NAME" = "gpu_jlab" ]
+then
+    echo "Please use start_gpu to run GPU jobs!"
+    exit
+fi
+
 if [ ! -f helpers.sh ]
 then
     echo "Cannot find helpers.sh script!"
     exit
 fi
 . helpers.sh
-
-NAME="${1:-}"
 
 # The user could request either <resource>/<script>.sbatch or
 #                               <name>.sbatch

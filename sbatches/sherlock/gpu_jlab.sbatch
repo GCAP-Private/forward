@@ -15,6 +15,7 @@ source ~/.bashrc
 STATATMP="/scratch/groups/maggiori/stata_tmp"
 export STATATMP
 
-source activate gcap
+# source activate gcap
 cd /
+conda activate gpu1
 jupyter lab --no-browser --port=$PORT
