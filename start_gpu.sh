@@ -55,6 +55,7 @@ SBATCH_NAME=$(basename $SBATCH)
 
 # Set default value for CONSTRAINT_H100 if not defined
 : ${CONSTRAINT_H100:=0}
+: ${CONSTRAINT_A100:=0}
 
 if [ "$CONSTRAINT_H100" -eq 1 ]
 then
@@ -65,6 +66,21 @@ then
         --ntasks=$CORES
         --gpus=$GPUS
         --constraint=GPU_SKU:H100_SXM5
+        --nodes=1
+        --output=$RESOURCE_HOME/forward-util/$SBATCH_NAME.out
+        --error=$RESOURCE_HOME/forward-util/$SBATCH_NAME.err
+        --mem=$MEM
+        --time=$TIME
+        $RESOURCE_HOME/forward-util/$SBATCH_NAME $PORT \"${@:2}\""
+elif [ "$CONSTRAINT_A100" -eq 1 ]
+then
+    echo "GPU constrained to A100"
+    command="sbatch
+        --job-name=$NAME
+        --partition=$PARTITION
+        --ntasks=$CORES
+        --gpus=$GPUS
+        --nodelist=sh03-18n07
         --nodes=1
         --output=$RESOURCE_HOME/forward-util/$SBATCH_NAME.out
         --error=$RESOURCE_HOME/forward-util/$SBATCH_NAME.err
