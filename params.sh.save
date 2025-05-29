@@ -1,0 +1,8 @@
+RES_USERNAME="maggiori"
+PORT="49195"
+PARTITION="maggiori,gsb"
+RESOURCE="sherlock"
+MEM="2B00G"
+CORES="3"
+TIME="2:00:00"
+CONTAINERSHARE="/scratch/users/vsochat/share"
