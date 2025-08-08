@@ -6,6 +6,30 @@
 # Configuration
 #
 
+
+function check_for_params_file() {
+    if [ ! -f $PARAMS_FILE ]
+    then
+        # Since orignal params files were called params.sh params_gpu.sh, we check for those to not break things for exising users
+        if [ "$NAME" == "gcap_jlab" ] && [ -f params.sh ]
+        then
+            PARAMS_FILE="params.sh"
+            echo
+            echo "NOTE FOR USER: Using params.sh for ${NAME}. Ideally you should rename this file to params_${NAME}.sh."
+            echo
+        elif [ "$NAME" == "gpu_jlab" ] && [ -f params_gpu.sh ]
+        then
+            PARAMS_FILE="params_gpu.sh"
+            echo
+            echo "NOTE FOR USER: Using params_gpu.sh for ${NAME}. Ideally you should rename this file to params_${NAME}.sh."
+            echo
+        else
+            echo "Need to configure params before first run, run setup.sh!"
+            exit
+        fi
+    fi
+}
+
 function set_forward_script() {
 
     FOUND="no"
