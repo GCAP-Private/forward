@@ -55,10 +55,23 @@ then
 else
     GPU_REQUEST="--gpus=$GPUS"
 fi
+# Check whether job contains contrainsts on which GPUs to use
+# Set default value for GPUS constraint if not defined
+: ${CONSTRAINT_H100:=0}
+: ${CONSTRAINT_A100:=0}
+if [ "$CONSTRAINT_H100" -eq 1 ]
+then
+    echo "GPU constrained to H100"
+    GPU_CONSTRAINT="--constraint=GPU_SKU:H100_SXM5"
+elif [ "$CONSTRAINT_A100" -eq 1 ]
+then
+    echo "GPU constrained to A100"
+    GPU_CONSTRAINT="--nodelist=sh03-18n07"
+fi
 # Write command to submit the sbatch job on the resource
 command="sbatch
     --job-name=$NAME --partition=$PARTITION
-    --ntasks=$CORES $GPU_REQUEST
+    --ntasks=$CORES $GPU_REQUEST $GPU_CONSTRAINT
     --nodes=1
     --output=$RESOURCE_HOME/forward-util/$SBATCH_NAME.out
     --error=$RESOURCE_HOME/forward-util/$SBATCH_NAME.err

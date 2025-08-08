@@ -1,1 +1,6 @@
 params.sh
+params_gcap_jlab.sh
+params_gpu.sh
+params_gpu_jlab.sh
+params_lx1_fc_model.sh
+**/.DS_Store
