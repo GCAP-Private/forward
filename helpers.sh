@@ -130,7 +130,7 @@ function get_machine() {
     # If we didn't get a node...
     if [[ "$MACHINE" != "sh"* ]] && [[ "$MACHINE" != "midway"* ]]
         then
-        echo "Tried ${ATTEMPTS} attempts!"  1>&2
+        echo "Tried ${ATTEMPT} attempts!"  1>&2
         exit 1
     fi
 }

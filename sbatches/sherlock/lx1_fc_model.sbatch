@@ -11,10 +11,11 @@ module load stata/16
 
 /home/groups/maggiori/miniconda3/bin/conda init bash
 source ~/.bashrc
+source ~/shell_profile.sh
 
 STATATMP="/scratch/groups/maggiori/stata_tmp"
 export STATATMP
 
-source activate lx1_fc_model
-cd /
+conda activate $lx1/envs/lx1_fc_model
+cd ~
 jupyter lab --no-browser --port=$PORT

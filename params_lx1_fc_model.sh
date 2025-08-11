@@ -1,5 +1,5 @@
 RES_USERNAME="angusl"
-PORT="49359"
+PORT="49357"
 PARTITION="maggiori"
 RESOURCE="sherlock"
 MEM="600G"

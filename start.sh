@@ -9,7 +9,7 @@
 # Check if the user has given a name for the job to submit
 if [ "$#" -eq 0 ]
 then
-    echo "Need to give name of sbatch job to run!"
+    echo "Need to give name of sbatch job to run! Enter gcap_jlab if you unsure."
     exit
 fi
 # Check if the helpers.sh script exists
@@ -71,7 +71,7 @@ fi
 # Write command to submit the sbatch job on the resource
 command="sbatch
     --job-name=$NAME --partition=$PARTITION
-    --ntasks=$CORES $GPU_REQUEST $GPU_CONSTRAINT
+    --ntasks=$CORES $GPU_REQUEST $GPU_CONSTRAINT $ADDITIONAL_ARGS
     --nodes=1
     --output=$RESOURCE_HOME/forward-util/$SBATCH_NAME.out
     --error=$RESOURCE_HOME/forward-util/$SBATCH_NAME.err
