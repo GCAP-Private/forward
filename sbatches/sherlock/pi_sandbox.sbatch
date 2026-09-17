@@ -15,7 +15,7 @@
 PORT=$1
 # id -un rather than $USER or $SCRATCH: this runs under sbatch, where the
 # submitting environment is not guaranteed to carry either one.
-SANDBOX="/scratch/users/$(id -un)"
+SANDBOX="/oak/stanford/groups/maggiori/GCAP/sandbox/$(id -un)"
 NOTEBOOK_DIR=${2:-$SANDBOX}
 CONTAINER="/home/groups/maggiori/apptainers/pi-sandbox.sif"
 
