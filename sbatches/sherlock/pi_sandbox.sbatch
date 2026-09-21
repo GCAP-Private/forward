@@ -178,12 +178,15 @@ if [ "${PI_SANDBOX_SLURM:-1}" != "0" ]; then
         # /opt/ai1/sherlock/ai1.sbatch` much later, inside the container.
         # Not derived from $0: under sbatch the controller runs a copy of
         # this script out of the SLURM spool, so dirname $0 is the spool.
+        # Only sherlock/, not the whole checkout: sbatch needs to read the
+        # submit script and nothing else, and the repo root carries notebooks,
+        # build trees and spreadsheets that are no business of the agent's.
         ai1_dir="${AI1_DIR:-$HOME/ai1}"
-        if [ -d "$ai1_dir" ]; then
-            SLURM_BINDS+=(--bind "${ai1_dir}:/opt/ai1:ro")
+        if [ -d "${ai1_dir}/sherlock" ]; then
+            SLURM_BINDS+=(--bind "${ai1_dir}/sherlock:/opt/ai1/sherlock:ro")
         else
-            echo "WARNING: ai1 checkout '${ai1_dir}' not found - /opt/ai1 will be" \
-                 "empty and the agent cannot sbatch sherlock/ai1.sbatch." \
+            echo "WARNING: '${ai1_dir}/sherlock' not found - /opt/ai1 will be" \
+                 "empty and the agent cannot sbatch ai1_sandbox.sbatch." \
                  "Set AI1_DIR to your checkout."
         fi
     fi
