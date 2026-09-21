@@ -1,20 +1,25 @@
 #!/bin/bash
 #
 # Runs the pi-sandbox apptainer, which serves jupyterlab.
-# The container is confined to the submitting user's own scratch - no $HOME,
-# no /oak, no group spaces, and no other user's scratch is visible from inside.
+# The container is confined to the submitting user's own sandbox directory in the
+# maggiori oak space - no $HOME, no $SCRATCH, no rest of /oak, and no other
+# user's sandbox is visible from inside.
 # Binds are a runtime thing, so this confinement lives here and not in the sif.
 #
+# The sandbox directory is created on first run, so a new user does not have to
+# set anything up by hand.
+#
 # Usage
-# 1. Default working directory (/scratch/users/$USER)
+# 1. Default working directory
+#    (/oak/stanford/groups/maggiori/GCAP/sandbox/$USER)
 # $ bash start.sh pi_sandbox
 #
 # 2. A subdirectory of the sandbox
-# $ bash start.sh pi_sandbox /scratch/users/$USER/myproject
+# $ bash start.sh pi_sandbox /oak/stanford/groups/maggiori/GCAP/sandbox/$USER/myproject
 
 PORT=$1
-# id -un rather than $USER or $SCRATCH: this runs under sbatch, where the
-# submitting environment is not guaranteed to carry either one.
+# id -un rather than $USER: this runs under sbatch, where the submitting
+# environment is not guaranteed to carry it.
 SANDBOX="/oak/stanford/groups/maggiori/GCAP/sandbox/$(id -un)"
 NOTEBOOK_DIR=${2:-$SANDBOX}
 CONTAINER="/home/groups/maggiori/apptainers/pi-sandbox.sif"
@@ -31,10 +36,34 @@ case "$NOTEBOOK_DIR" in
         ;;
 esac
 
+# A first-time user has no sandbox of their own yet, so create it here rather
+# than making them go do it on a login node first. It has to exist before the
+# --bind below either way: apptainer will not create a missing bind source.
+#
+# 700 explicitly, and not left to the umask: the parent is a shared group
+# directory, so the default would be group-readable and every other maggiori
+# member could read this user's work from a login node. Only applied when we
+# create the directory, so a user who has deliberately loosened their own
+# sandbox keeps that.
+if [ ! -d "$SANDBOX" ]
+then
+    echo "Creating sandbox ${SANDBOX}"
+    if ! mkdir -p "$SANDBOX" || ! chmod 700 "$SANDBOX"
+    then
+        echo "Could not create sandbox ${SANDBOX}"
+        exit 1
+    fi
+fi
+
+# $2 can name a subdirectory that does not exist yet
 if [ ! -d "$NOTEBOOK_DIR" ]
 then
-    echo "Working directory ${NOTEBOOK_DIR} does not exist"
-    exit 1
+    echo "Creating working directory ${NOTEBOOK_DIR}"
+    if ! mkdir -p "$NOTEBOOK_DIR"
+    then
+        echo "Could not create working directory ${NOTEBOOK_DIR}"
+        exit 1
+    fi
 fi
 
 # Sherlock exports default bind paths (/home/users, /oak, /scratch, ...) via
