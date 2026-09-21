@@ -106,6 +106,89 @@ export HOSTNAME=pi-sandbox
 export PS1='[\u@pi-sandbox \w]\$ '
 PROMPT_ENV_EOF
 
+# ---------------------------------------------------------------------------
+# SLURM client bridge (PI_SANDBOX_SLURM=0 to switch off)
+#
+# Lets the agent submit the ai1 DAG batch job - see the ai1-dag skill baked
+# into the image. Understand what it opens before leaving it on: a job
+# submitted from inside runs OUTSIDE the container, as you, with $HOME, all of
+# $OAK and $SCRATCH visible. The filesystem confinement below does not reach
+# submitted jobs. Everything else in the sandbox works with this off; the
+# wrappers just print how to turn it back on.
+#
+# The host's Slurm is bound in rather than baked into the SIF so a cluster-side
+# upgrade cannot strand a stale client in the image. Four pieces:
+#
+#   binaries  -> /opt/slurm-host/bin  (wrapped by /opt/slurm-bin/*, which scope
+#                LD_LIBRARY_PATH to the exec so el7 libz/libselinux cannot
+#                shadow Debian's for the rest of the container)
+#   libraries -> /opt/slurm-libs      CentOS 7 .so files bookworm does not have
+#   plugins   -> /usr/lib64/slurm     path is compiled into the binaries
+#   auth      -> /run/slurm           sack.socket + the configless conf cache
+#
+# Sherlock runs AuthType=auth/slurm, not munge - there is no munge socket on
+# the node at all. Auth is the peer credentials on sack.socket
+# (AuthInfo=use_client_ids), so no key material crosses into the container.
+# /var/spool/slurmd/conf-cache is bound because /run/slurm/conf is a symlink
+# to it; without the target the clients find no configuration.
+#
+# The library list is explicit rather than "bind /usr/lib64": that directory
+# also holds the el7 glibc, and putting it on LD_LIBRARY_PATH next to the
+# container's own ld.so is how you get a process that cannot start at all.
+SLURM_BINDS=()
+if [ "${PI_SANDBOX_SLURM:-1}" != "0" ]; then
+    slurm_ok=1
+    for f in /run/slurm/sack.socket /var/spool/slurmd/conf-cache/slurm.conf; do
+        [ -e "$f" ] || { echo "WARNING: $f missing - no SLURM in the sandbox"; slurm_ok=0; }
+    done
+    if [ "$slurm_ok" = 1 ]; then
+        for b in sbatch squeue scancel sacct sinfo scontrol; do
+            [ -x "/usr/bin/$b" ] &&
+                SLURM_BINDS+=(--bind "/usr/bin/$b:/opt/slurm-host/bin/$b:ro")
+        done
+        # Closure of what the client binaries and their auth/serializer
+        # plugins dlopen, minus what glibc provides. Regenerate after a Slurm
+        # upgrade with:
+        #   ldd /usr/bin/sbatch /usr/lib64/slurm/{auth_slurm,serializer_*}.so
+        for l in libcom_err.so.2 libcrypto.so.10 libgssapi_krb5.so.2 \
+                 libjansson.so.4 libjwt.so.1 libk5crypto.so.3 libkeyutils.so.1 \
+                 libkrb5.so.3 libkrb5support.so.0 libpcre.so.1 libselinux.so.1 \
+                 libssl.so.10 libz.so.1 libjson-c.so.2 libyaml-0.so.2 \
+                 libreadline.so.6 libhistory.so.6 libtinfo.so.5; do
+            src="$(readlink -f "/usr/lib64/$l" 2>/dev/null)"
+            [ -n "$src" ] && [ -e "$src" ] &&
+                SLURM_BINDS+=(--bind "${src}:/opt/slurm-libs/${l}:ro")
+        done
+        SLURM_BINDS+=(
+            --bind /usr/lib64/slurm:/usr/lib64/slurm:ro
+            --bind /run/slurm:/run/slurm
+            --bind /var/spool/slurmd/conf-cache:/var/spool/slurmd/conf-cache:ro
+        )
+        # The ai1 checkout, so the agent can `sbatch /opt/ai1/sherlock/
+        # ai1.sbatch`. A container-only path is fine for the script itself:
+        # sbatch transmits the script's CONTENTS to the controller. The YAML
+        # passed as its argument is different - that one is resolved on the
+        # host when the job starts, so it has to live under the sandbox leaf,
+        # the one tree with the same absolute path on both sides.
+        #
+        # Default expanded here, next to its only use. A top-of-file
+        # assignment is the line a hand-merge of this block drops, and then
+        # ${AI1_DIR} expands to nothing, `-d ""` is false, and the only
+        # symptom is `sbatch: error: Unable to open file
+        # /opt/ai1/sherlock/ai1.sbatch` much later, inside the container.
+        # Not derived from $0: under sbatch the controller runs a copy of
+        # this script out of the SLURM spool, so dirname $0 is the spool.
+        ai1_dir="${AI1_DIR:-$HOME/ai1}"
+        if [ -d "$ai1_dir" ]; then
+            SLURM_BINDS+=(--bind "${ai1_dir}:/opt/ai1:ro")
+        else
+            echo "WARNING: ai1 checkout '${ai1_dir}' not found - /opt/ai1 will be" \
+                 "empty and the agent cannot sbatch sherlock/ai1.sbatch." \
+                 "Set AI1_DIR to your checkout."
+        fi
+    fi
+fi
+
 # --containall   empty $HOME and /tmp, minimal /dev, own IPC namespace
 # --no-mount     drop the bind paths configured in apptainer.conf
 # --bind         the only host paths the container gets
@@ -133,6 +216,7 @@ apptainer exec \
     --bind /etc/hosts:/etc/hosts:ro \
     --bind /etc/resolv.conf:/etc/resolv.conf:ro \
     --bind "${PROMPT_ENV}:/.singularity.d/env/91-pi-sandbox-prompt.sh:ro" \
+    ${SLURM_BINDS[@]+"${SLURM_BINDS[@]}"} \
     --pwd "${NOTEBOOK_DIR}" \
     "${CONTAINER}" \
     jupyter lab --no-browser --ip=127.0.0.1 --port=$PORT \
