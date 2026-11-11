@@ -1,3 +1,7 @@
 params.sh
+params_gcap_jlab.sh
 params_gpu.sh
+params_gpu_jlab.sh
+params_lx1_fc_model.sh
+params_pi_sandbox.sh
 **/.DS_Store

@@ -28,6 +28,7 @@ echo
 read -p "Port to use > "  PORT
 echo
 
+# output params for the gcap_jlab job
 # sherlock shared settings
 if [ "$RESOURCE" == "sherlock" ]; then
     PARTITION="maggiori,gsb,normal,owners"
@@ -36,7 +37,6 @@ if [ "$RESOURCE" == "sherlock" ]; then
     TIME="24:00:00"
     CONTAINERSHARE="/scratch/users/vsochat/share"
 fi
-
 # rcc shared settings
 if [ "$RESOURCE" == "rcc" ]; then
     PARTITION="neiman"
@@ -45,8 +45,33 @@ if [ "$RESOURCE" == "rcc" ]; then
     TIME="60:00:00"
     CONTAINERSHARE="/project2/neiman/GCAP/software/python/vsochat/share"
 fi
-
+# save to a params file
 for var in RES_USERNAME PORT PARTITION RESOURCE MEM CORES TIME CONTAINERSHARE
 do
     echo "$var="'"'"$(eval echo '$'"$var")"'"'
-done >> params.sh
+done >> params_gcap_jlab.sh
+
+# output params for the gpu_jlab job
+# sherlock shared settings
+if [ "$RESOURCE" == "sherlock" ]; then
+    PARTITION="maggiori"
+	MEM="80G"
+    CORES="8"
+    GPUS="1"
+    TIME="4:00:00"
+    CONTAINERSHARE="/scratch/users/vsochat/share"
+fi
+# rcc shared settings
+if [ "$RESOURCE" == "rcc" ]; then
+    PARTITION="neiman"
+	MEM="50G"
+    CORES="2"
+    GPUS="2"
+    TIME="60:00:00"
+    CONTAINERSHARE="/project2/neiman/GCAP/software/python/vsochat/share"
+fi
+# save to a params file
+for var in RES_USERNAME PORT PARTITION RESOURCE MEM CORES GPUS TIME CONTAINERSHARE
+do
+    echo "$var="'"'"$(eval echo '$'"$var")"'"'
+done >> params_gpu_jlab.sh
