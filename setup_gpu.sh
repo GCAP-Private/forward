@@ -33,8 +33,8 @@ if [ "$RESOURCE" == "sherlock" ]; then
     PARTITION="maggiori"
 	MEM="80G"
     CORES="8"
-    GPUS="2"
-    TIME="24:00:00"
+    GPUS="1"
+    TIME="4:00:00"
     CONTAINERSHARE="/scratch/users/vsochat/share"
 fi
 
